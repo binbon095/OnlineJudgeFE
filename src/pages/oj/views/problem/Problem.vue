@@ -73,12 +73,19 @@
             <div v-else-if="problem.my_status === 0">
               <Alert type="success" show-icon>{{$t('m.You_have_solved_the_problem')}}</Alert>
             </div>
-            <div v-else-if="this.contestID && !OIContestRealTimePermission && submissionExists">
+          	<div v-else-if="this.contestID && !OIContestRealTimePermission && submissionExists">
               <Alert type="success" show-icon>{{$t('m.You_have_submitted_a_solution')}}</Alert>
             </div>
             <div v-if="contestEnded">
               <Alert type="warning" show-icon>{{$t('m.Contest_has_ended')}}</Alert>
             </div>
+            <div v-if="problem.my_status === 0" id="problem-solution">
+              <p class="title">Model Solution</p>              
+              <li v-for="(ms_code,ms_lang) in problem.model_solution">
+            		{{ ms_lang }}
+            		<Highlight :code="ms_code" :language="ms_lang" :border-color="status.color"></Highlight>         		
+				</li>          	
+          	</div>
           </Col>
 
           <Col :span="12">
@@ -140,7 +147,7 @@
         </div>
         <ul>
           <li><p>ID</p>
-            <p>{{problem._id}}</p></li>
+            <p>{{problem._id}}</p></li>                      
           <li>
             <p>{{$t('m.Time_Limit')}}</p>
             <p>{{problem.time_limit}}MS</p></li>
@@ -208,6 +215,7 @@
   import {JUDGE_STATUS, CONTEST_STATUS, buildProblemCodeKey} from '@/utils/constants'
   import api from '@oj/api'
   import {pie, largePie} from './chartData'
+  import Highlight from '@/pages/oj/components/Highlight'
 
   // 只显示这些状态的图形占用
   const filtedStatus = ['-1', '-2', '0', '1', '2', '3', '4', '8']
@@ -215,7 +223,8 @@
   export default {
     name: 'Problem',
     components: {
-      CodeMirror
+      CodeMirror,
+      Highlight
     },
     mixins: [FormMixin],
     data () {
@@ -243,6 +252,7 @@
           hint: '',
           my_status: '',
           template: {},
+          model_solution: {},
           languages: [],
           created_by: {
             username: ''
@@ -487,6 +497,11 @@
         } else {
           return {name: 'submission-list', query: {problemID: this.problemID}}
         }
+      },
+      status () {
+        return {
+          color: JUDGE_STATUS[0].color
+        }
       }
     },
     beforeRouteLeave (to, from, next) {
@@ -578,7 +593,19 @@
       }
     }
   }
-
+  
+    #problem-solution {
+    .title {
+      font-size: 20px;
+      font-weight: 400;
+      margin: 25px 0 8px 0;
+      color: #3091f2;
+      .copy {
+        padding-left: 8px;
+      }
+    }
+  }
+  
   #info {
     margin-bottom: 20px;
     margin-top: 20px;
