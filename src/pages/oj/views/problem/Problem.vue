@@ -79,13 +79,6 @@
             <div v-if="contestEnded">
               <Alert type="warning" show-icon>{{$t('m.Contest_has_ended')}}</Alert>
             </div>
-            <div v-if="problem.my_status === 0" id="problem-solution">
-              <p class="title">Model Solution</p>              
-              <li v-for="(ms_code,ms_lang) in problem.model_solution">
-            		{{ ms_lang }}
-            		<Highlight :code="ms_code" :language="ms_lang" :border-color="status.color"></Highlight>         		
-				</li>          	
-          	</div>
           </Col>
 
           <Col :span="12">
@@ -104,6 +97,16 @@
               <span v-else>{{$t('m.Submit')}}</span>
             </Button>
           </Col>
+          <Col :span="20">    
+            <div v-if="problem.my_status === 0 || isAdminRole" id="problem-solution">
+              <p class="title">Model Solution</p>              
+              <li v-for="(ms_code,ms_lang) in problem.model_solution">
+            		{{ ms_lang }}
+            		<Highlight :code="ms_code" :language="ms_lang" :border-color="status.color"></Highlight>         		
+			   </li>          	
+          	</div>
+		  </Col>
+          
         </Row>
       </Card>
     </div>
@@ -308,7 +311,11 @@
             return
           }
           // try to load problem template
-          this.language = this.problem.languages[0]
+          if (this.problem.languages.includes('Python3')) {
+            this.language = 'Python3'
+          } else {
+            this.language = this.problem.languages[0]
+          }
           let template = this.problem.template
           if (template && template[this.language]) {
             this.code = template[this.language]
@@ -478,7 +485,7 @@
       }
     },
     computed: {
-      ...mapGetters(['problemSubmitDisabled', 'contestRuleType', 'OIContestRealTimePermission', 'contestStatus']),
+      ...mapGetters(['problemSubmitDisabled', 'contestRuleType', 'OIContestRealTimePermission', 'contestStatus', 'isAdminRole']),
       contest () {
         return this.$store.state.contest.contest
       },
