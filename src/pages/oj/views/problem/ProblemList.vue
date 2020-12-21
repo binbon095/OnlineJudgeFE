@@ -91,7 +91,7 @@
           {
             title: '#',
             key: '_id',
-            width: 80,
+            width: 100,
             render: (h, params) => {
               return h('Button', {
                 props: {
@@ -111,7 +111,7 @@
           },
           {
             title: this.$i18n.t('m.Title'),
-            width: 400,
+            width: 500,
             render: (h, params) => {
               return h('Button', {
                 props: {
