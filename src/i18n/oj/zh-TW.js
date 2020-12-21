@@ -146,7 +146,7 @@ export const m = {
   // NavBar.vue
   Home: '首頁',
   NavProblems: '試題',
-  Contests: '比賽',
+  Contests: '課程',
   NavStatus: '狀態',
   Rank: '排名',
   ACM_Rank: 'ACM 排名',

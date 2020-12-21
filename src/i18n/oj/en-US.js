@@ -146,7 +146,7 @@ export const m = {
   // NavBar.vue
   Home: 'Home',
   NavProblems: 'Problems',
-  Contests: 'Contests',
+  Contests: 'Courses',
   NavStatus: 'Status',
   Rank: 'Rank',
   ACM_Rank: 'ACM Rank',

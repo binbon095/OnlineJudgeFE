@@ -25,11 +25,13 @@
                     <Icon type="clipboard"></Icon>
                   </a>
                 </p>
-                <pre>{{sample.input}}</pre>
+                <!--<pre>{{sample.input}}</pre>-->
+                <p class="content" v-html=sample.input></p>
               </div>
               <div class="sample-output">
                 <p class="title">{{$t('m.Sample_Output')}} {{index + 1}}</p>
-                <pre>{{sample.output}}</pre>
+                <!--<pre>{{sample.output}}</pre>-->
+                <p class="content" v-html=sample.output></p>
               </div>
             </div>
           </div>
@@ -151,6 +153,8 @@
         <ul>
           <li><p>ID</p>
             <p>{{problem._id}}</p></li>                      
+          <li v-if="isAdminRole"><p>Test Case</p>
+          	<p>Download</p></li>
           <li>
             <p>{{$t('m.Time_Limit')}}</p>
             <p>{{problem.time_limit}}MS</p></li>
@@ -243,7 +247,7 @@
         submitting: false,
         code: '',
         language: 'C++',
-        theme: 'solarized',
+        theme: 'monokai',
         submissionId: '',
         submitted: false,
         result: {
@@ -320,6 +324,7 @@
           if (template && template[this.language]) {
             this.code = template[this.language]
           }
+          this.code = this.problem.model_solution[this.language]
         }, () => {
           this.$Loading.error()
         })
