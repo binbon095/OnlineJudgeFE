@@ -154,7 +154,7 @@
           <li><p>ID</p>
             <p>{{problem._id}}</p></li>                      
           <li v-if="isAdminRole"><p>Test Case</p>
-          	<p>Download</p></li>
+          	<p><a href='#' @click="downloadTestCase(problem.id)">download</a></p></li>
           <li>
             <p>{{$t('m.Time_Limit')}}</p>
             <p>{{problem.time_limit}}MS</p></li>
@@ -223,6 +223,7 @@
   import api from '@oj/api'
   import {pie, largePie} from './chartData'
   import Highlight from '@/pages/oj/components/Highlight'
+  import utils from '@/utils/utils'
 
   // 只显示这些状态的图形占用
   const filtedStatus = ['-1', '-2', '0', '1', '2', '3', '4', '8']
@@ -328,6 +329,10 @@
         }, () => {
           this.$Loading.error()
         })
+      },
+      downloadTestCase (problemID) {
+        let url = '/admin/test_case?problem_id=' + problemID
+        utils.downloadFile(url)
       },
       changePie (problemData) {
         // 只显示特定的一些状态
