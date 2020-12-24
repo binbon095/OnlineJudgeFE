@@ -325,7 +325,7 @@
           if (template && template[this.language]) {
             this.code = template[this.language]
           }
-          this.code = this.problem.model_solution[this.language]
+          // this.code = this.problem.model_solution[this.language]
         }, () => {
           this.$Loading.error()
         })
