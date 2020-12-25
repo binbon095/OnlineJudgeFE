@@ -35,6 +35,14 @@
                 type="primary" size="large" @click="shareSubmission(true)">
           {{$t('m.Share')}}
         </Button>
+        <Button v-if="isAdminRole"
+                type="primary" size="large" @click="updateSubmissionResult(0)">
+          Accept Manually
+        </Button>
+        <Button v-if="isAdminRole"
+                type="warning" size="large" @click="updateSubmissionResult(-1)">
+          Reject Manually
+        </Button>
       </div>
     </Col>
   </Row>
@@ -147,7 +155,15 @@
         })
       },
       shareSubmission (shared) {
-        let data = {id: this.submission.id, shared: shared}
+        let data = {cmd: 'updateShare', id: this.submission.id, shared: shared, result: 0}
+        api.updateSubmission(data).then(res => {
+          this.getSubmission()
+          this.$success(this.$i18n.t('m.Succeeded'))
+        }, () => {
+        })
+      },
+      updateSubmissionResult (result) {
+        let data = {cmd: 'updateResult', id: this.submission.id, result: result, shared: false}
         api.updateSubmission(data).then(res => {
           this.getSubmission()
           this.$success(this.$i18n.t('m.Succeeded'))
