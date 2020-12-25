@@ -112,6 +112,7 @@ export const m = {
   Problems: '题目',
   Announcements: '公告',
   Submissions: '提交信息',
+  Problem_Submissions: '题目提交信息',
   Rankings: '排名',
   Overview: '概要',
   Admin_Helper: '管理员助手',
