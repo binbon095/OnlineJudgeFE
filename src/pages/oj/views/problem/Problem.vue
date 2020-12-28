@@ -14,24 +14,31 @@
           <p class="title">{{$t('m.Output')}} <span v-if="problem.io_mode.io_mode=='File IO'">({{$t('m.ToFile')}}: {{ problem.io_mode.output }})</span></p>
           <p class="content" v-html=problem.output_description></p>
 
-          <div v-for="(sample, index) of problem.samples" :key="index">
+          <div v-for="(sample, index) of samples" :key="index">
             <div class="flex-container sample">
               <div class="sample-input">
                 <p class="title">{{$t('m.Sample_Input')}} {{index + 1}}
-                  <a class="copy"
-                     v-clipboard:copy="sample.input"
+                  <a class="copy" v-if="sample.input[0] !== ''"
+                     v-clipboard:copy="sample.input[0]"
                      v-clipboard:success="onCopy"
                      v-clipboard:error="onCopyError">
                     <Icon type="clipboard"></Icon>
                   </a>
                 </p>
-                <!--<pre>{{sample.input}}</pre>-->
-                <p class="content" v-html=sample.input></p>
+                <pre v-if="sample.input[0] !== ''">{{sample.input[0]}}</pre>
+                <p class="content" v-html=sample.input[1]></p>
               </div>
               <div class="sample-output">
-                <p class="title">{{$t('m.Sample_Output')}} {{index + 1}}</p>
-                <!--<pre>{{sample.output}}</pre>-->
-                <p class="content" v-html=sample.output></p>
+                <p class="title">{{$t('m.Sample_Output')}} {{index + 1}}
+                  <a class="copy" v-if="sample.output[0] !== ''"
+                     v-clipboard:copy="sample.output[0]"
+                     v-clipboard:success="onCopy"
+                     v-clipboard:error="onCopyError">
+                    <Icon type="clipboard"></Icon>
+                  </a>
+                </p>
+                <pre v-if="sample.output[0] !== ''">{{sample.output[0]}}</pre>
+                <p class="content" v-html=sample.output[1]></p>
               </div>
             </div>
           </div>
@@ -251,6 +258,7 @@
         theme: 'monokai',
         submissionId: '',
         submitted: false,
+        samples: [],
         result: {
           result: 9
         },
@@ -262,6 +270,7 @@
           template: {},
           model_solution: {},
           languages: [],
+          samples: [],
           created_by: {
             username: ''
           },
@@ -326,6 +335,12 @@
             this.code = template[this.language]
           }
           // this.code = this.problem.model_solution[this.language]
+          // try to split sample in out
+          this.samples = []
+          for (let i = 0; i <= this.problem.samples.length; ++i) {
+            let sample = {'input': this.problem.samples[i].input.split('|||'), 'output': this.problem.samples[i].output.split('|||')}
+            this.samples.push(sample)
+          }
         }, () => {
           this.$Loading.error()
         })
