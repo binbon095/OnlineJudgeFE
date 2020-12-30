@@ -232,11 +232,11 @@ export default {
       }
     })
   },
-  submissionRejudge (id) {
+  submissionRejudge (id, result) {
     return ajax('admin/submission/rejudge', 'get', {
       params: {
         id,
-        updated_result
+        result
       }
     })
   },

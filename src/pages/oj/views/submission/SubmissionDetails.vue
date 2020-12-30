@@ -17,7 +17,7 @@
       </Alert>
     </Col>
 
-    <!--?????°è??infoå°±æ?¾ç¤º??ºæ?¥ï?? ????????§å?¶æ?¾å????? -->
+    <!--?????ï¿½ï¿½??infoå°±ï¿½?ï¿½ç¤º??ï¿½ï¿½?ï¿½ï¿½?? ????????ï¿½ï¿½?ï¿½ï¿½?ï¿½ï¿½????? -->
     <Col v-if="submission.info && !isCE" :span="20">
       <Table stripe :loading="loading" :disabled-hover="true" :columns="columns" :data="submission.info.data"></Table>
     </Col>
@@ -170,8 +170,8 @@
         }, () => {
         })
       },
-      handleManualRejudge (updated_result) {
-        api.submissionRejudge(this.submission.id, updated_result).then(res => {
+      handleManualRejudge (result) {
+        api.submissionRejudge(this.submission.id, result).then(res => {
           this.getSubmission()
           this.$success(this.$i18n.t('m.Succeeded'))
         }, () => {
