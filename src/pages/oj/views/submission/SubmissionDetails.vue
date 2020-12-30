@@ -17,7 +17,7 @@
       </Alert>
     </Col>
 
-    <!--åŽå°è¿”infoå°±æ˜¾ç¤ºå‡ºæ¥ï¼Œ æƒé™æŽ§åˆ¶æ”¾åŽå° -->
+    <!--?????°è??infoå°±æ?¾ç¤º??ºæ?¥ï?? ????????§å?¶æ?¾å????? -->
     <Col v-if="submission.info && !isCE" :span="20">
       <Table stripe :loading="loading" :disabled-hover="true" :columns="columns" :data="submission.info.data"></Table>
     </Col>
@@ -36,11 +36,11 @@
           {{$t('m.Share')}}
         </Button>
         <Button v-if="isAdminRole && submission.result !== 0"
-                type="primary" size="large" @click="updateSubmissionResult(0)">
+                type="primary" size="large" @click="handleManualRejudge(0)">
           Accept Manually
         </Button>
         <Button v-if="isAdminRole && submission.result === 0"
-                type="warning" size="large" @click="updateSubmissionResult(-1)">
+                type="warning" size="large" @click="handleManualRejudge(-1)">
           Reject Manually
         </Button>
       </div>
@@ -165,6 +165,13 @@
       updateSubmissionResult (result) {
         let data = {cmd: 'updateResult', id: this.submission.id, result: result, shared: false}
         api.updateSubmission(data).then(res => {
+          this.getSubmission()
+          this.$success(this.$i18n.t('m.Succeeded'))
+        }, () => {
+        })
+      },
+      handleManualRejudge (updated_result) {
+        api.submissionRejudge(this.submission.id, updated_result).then(res => {
           this.getSubmission()
           this.$success(this.$i18n.t('m.Succeeded'))
         }, () => {

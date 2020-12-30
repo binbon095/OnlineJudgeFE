@@ -235,7 +235,8 @@ export default {
   submissionRejudge (id) {
     return ajax('admin/submission/rejudge', 'get', {
       params: {
-        id
+        id,
+        updated_result
       }
     })
   },
