@@ -35,11 +35,11 @@
                 type="primary" size="large" @click="shareSubmission(true)">
           {{$t('m.Share')}}
         </Button>
-        <Button v-if="isAdminRole"
+        <Button v-if="isAdminRole && submission.result !== 0"
                 type="primary" size="large" @click="updateSubmissionResult(0)">
           Accept Manually
         </Button>
-        <Button v-if="isAdminRole"
+        <Button v-if="isAdminRole && submission.result === 0"
                 type="warning" size="large" @click="updateSubmissionResult(-1)">
           Reject Manually
         </Button>
