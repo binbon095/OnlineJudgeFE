@@ -34,7 +34,7 @@
     </div>
     <div v-show="showMenu" id="contest-menu">
       <VerticalMenu @on-click="handleRoute">
-        <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
+        <!--<VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
           <Icon type="home"></Icon>
           {{$t('m.Overview')}}
         </VerticalMenu-item>
@@ -44,14 +44,14 @@
           <Icon type="chatbubble-working"></Icon>
           {{$t('m.Announcements')}}
         </VerticalMenu-item>
-
+		-->
         <VerticalMenu-item :disabled="contestMenuDisabled"
                            :route="{name: 'contest-problem-list', params: {contestID: contestID}}">
           <Icon type="ios-photos"></Icon>
           {{$t('m.Problems')}}
         </VerticalMenu-item>
 
-        <VerticalMenu-item v-if="OIContestRealTimePermission"
+        <!--<VerticalMenu-item v-if="OIContestRealTimePermission"
                            :disabled="contestMenuDisabled"
                            :route="{name: 'contest-submission-list'}">
           <Icon type="navicon-round"></Icon>
@@ -71,6 +71,7 @@
           {{$t('m.Admin_Helper')}}
         </VerticalMenu-item>
       </VerticalMenu>
+      -->
     </div>
   </div>
 </template>
@@ -144,6 +145,7 @@
     methods: {
       ...mapActions(['changeDomTitle']),
       handleRoute (route) {
+        route = '/problem?keyword=' + this.contest._id
         this.$router.push(route)
       },
       checkPassword () {
