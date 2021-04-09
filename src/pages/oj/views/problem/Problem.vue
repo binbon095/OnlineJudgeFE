@@ -8,36 +8,36 @@
           <p class="title">{{$t('m.Description')}}</p>
           <p class="content" v-html=problem.description></p>
           <!-- {{$t('m.music')}} -->
-          <p class="title">{{$t('m.Input')}} <span v-if="problem.io_mode.io_mode=='File IO'">({{$t('m.FromFile')}}: {{ problem.io_mode.input }})</span></p>
-          <p class="content" v-html=problem.input_description></p>
-
-          <p class="title">{{$t('m.Output')}} <span v-if="problem.io_mode.io_mode=='File IO'">({{$t('m.ToFile')}}: {{ problem.io_mode.output }})</span></p>
-          <p class="content" v-html=problem.output_description></p>
-
+          <div v-if="problem.input_description">
+          	<p class="title">{{$t('m.Input')}} <span v-if="problem.io_mode.io_mode=='File IO'">({{$t('m.FromFile')}}: {{ problem.io_mode.input }})</span></p>
+          	<p class="content" v-html=problem.input_description></p>
+		  </div>
+		  <div v-if="problem.output_description">
+          	<p class="title">{{$t('m.Output')}} <span v-if="problem.io_mode.io_mode=='File IO'">({{$t('m.ToFile')}}: {{ problem.io_mode.output }})</span></p>
+          	<p class="content" v-html=problem.output_description></p>
+		  </div>
           <div v-for="(sample, index) of samples" :key="index">
             <div class="flex-container sample">
-              <div class="sample-input">
-                <p class="title">{{$t('m.Sample_Input')}} {{index + 1}}
-                  <a class="copy" v-if="sample.input[0] !== ''"
+              <div class="sample-input"  v-if="sample.input[0]">
+                <p class="title">{{$t('m.Sample_Input')}} {{index + 1}}<a class="copy"
                      v-clipboard:copy="sample.input[0]"
                      v-clipboard:success="onCopy"
                      v-clipboard:error="onCopyError">
                     <Icon type="clipboard"></Icon>
                   </a>
                 </p>
-                <pre v-if="sample.input[0] !== ''">{{sample.input[0]}}</pre>
+                <pre>{{sample.input[0]}}</pre>
                 <p class="content" v-html=sample.input[1]></p>
               </div>
-              <div class="sample-output">
-                <p class="title">{{$t('m.Sample_Output')}} {{index + 1}}
-                  <a class="copy" v-if="sample.output[0] !== ''"
+              <div class="sample-output" v-if="sample.output[0]">
+                <p class="title">{{$t('m.Sample_Output')}} {{index + 1}}<a class="copy"
                      v-clipboard:copy="sample.output[0]"
                      v-clipboard:success="onCopy"
                      v-clipboard:error="onCopyError">
                     <Icon type="clipboard"></Icon>
                   </a>
                 </p>
-                <pre v-if="sample.output[0] !== ''">{{sample.output[0]}}</pre>
+                <pre>{{sample.output[0]}}</pre>
                 <p class="content" v-html=sample.output[1]></p>
               </div>
             </div>
@@ -320,6 +320,13 @@
           this.problem = problem
           this.changePie(problem)
 
+          // try to split sample in out
+          this.samples = []
+          for (let i = 0; i <= this.problem.samples.length; ++i) {
+            let sample = {'input': this.problem.samples[i].input.split('|||'), 'output': this.problem.samples[i].output.split('|||')}
+            this.samples.push(sample)
+          }
+
           // 在beforeRouteEnter中修改了, 说明本地有code，无需加载template
           if (this.code !== '') {
             return
@@ -335,12 +342,6 @@
             this.code = template[this.language]
           }
           // this.code = this.problem.model_solution[this.language]
-          // try to split sample in out
-          this.samples = []
-          for (let i = 0; i <= this.problem.samples.length; ++i) {
-            let sample = {'input': this.problem.samples[i].input.split('|||'), 'output': this.problem.samples[i].output.split('|||')}
-            this.samples.push(sample)
-          }
         }, () => {
           this.$Loading.error()
         })
