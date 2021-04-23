@@ -49,7 +49,6 @@
               <div class="content" v-html=problem.hint></div>
             </Card>
           </div>
-
           <div v-if="problem.source">
             <p class="title">{{$t('m.Source')}}</p>
             <p class="content">{{problem.source}}</p>
@@ -160,7 +159,7 @@
         <ul>
           <li><p>ID</p>
             <p>{{problem._id}}</p></li>                      
-          <li v-if="isAdminRole"><p>Test Case</p>
+          <li><p>Test Case</p>
           	<p><a href='#' @click="downloadTestCase(problem.id)">download</a></p></li>
           <li>
             <p>{{$t('m.Time_Limit')}}</p>
@@ -254,7 +253,7 @@
         problemID: '',
         submitting: false,
         code: '',
-        language: 'C++',
+        language: 'Python3',
         theme: 'monokai',
         submissionId: '',
         submitted: false,
@@ -319,27 +318,20 @@
           problem.languages = problem.languages.sort()
           this.problem = problem
           this.changePie(problem)
-
+          // 在beforeRouteEnter中修改了, 说明本地有code，无需加载template
+          if (this.code.trim() === '') {
+            // try to load problem template
+            this.language = 'Python3'
+            let template = this.problem.template
+            if (template && template[this.language]) {
+              this.code = template[this.language]
+            }
+          }
           // try to split sample in out
           this.samples = []
           for (let i = 0; i <= this.problem.samples.length; ++i) {
             let sample = {'input': this.problem.samples[i].input.split('|||'), 'output': this.problem.samples[i].output.split('|||')}
             this.samples.push(sample)
-          }
-
-          // 在beforeRouteEnter中修改了, 说明本地有code，无需加载template
-          if (this.code !== '') {
-            return
-          }
-          // try to load problem template
-          if (this.problem.languages.includes('Python3')) {
-            this.language = 'Python3'
-          } else {
-            this.language = this.problem.languages[0]
-          }
-          let template = this.problem.template
-          if (template && template[this.language]) {
-            this.code = template[this.language]
           }
           // this.code = this.problem.model_solution[this.language]
         }, () => {
