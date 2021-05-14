@@ -29,7 +29,7 @@
                 <pre>{{sample.input[0]}}</pre>
                 <p class="content" v-html=sample.input[1]></p>
               </div>
-              <div class="sample-output" v-if="sample.output[0]">
+              <div class="sample-output" v-if="sample.output[0] || sample.output[1]">
                 <p class="title">{{$t('m.Sample_Output')}} {{index + 1}}<a class="copy"
                      v-clipboard:copy="sample.output[0]"
                      v-clipboard:success="onCopy"
@@ -37,7 +37,7 @@
                     <Icon type="clipboard"></Icon>
                   </a>
                 </p>
-                <pre>{{sample.output[0]}}</pre>
+                <pre v-if="sample.output[0]">{{sample.output[0]}}</pre>
                 <p class="content" v-html=sample.output[1]></p>
               </div>
             </div>
